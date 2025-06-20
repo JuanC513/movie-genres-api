@@ -14,7 +14,7 @@ export function getAllGenres() {
 
 export function getGenreById(id) {
     const genres = getAllGenres();
-    return genres.find(g => g.id = id);
+    return genres.find(g => g.id === id);
 };
 
 export function addGenre(genre) {
