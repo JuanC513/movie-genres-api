@@ -5,7 +5,12 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const filePath = path.join(__dirname, '../data/genres.json');
+let filePath = path.join(__dirname, '../data/genres.json');
+
+// Let to change file from outside (to do tests)
+export function setFilePath(newPath) {
+    filePath = newPath;
+}
 
 export function getAllGenres() {
     const data = fs.readFileSync(filePath,'utf8');
