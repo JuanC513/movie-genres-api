@@ -1,3 +1,8 @@
+# node
 node_modules
+
+# tests
 tester.js
+
+# test data
 genres.test.json
