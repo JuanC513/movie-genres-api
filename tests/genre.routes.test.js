@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
 import request from 'supertest';
 import app from '../app.js';
@@ -17,7 +17,7 @@ beforeEach(() => {
         { id: 3, name: "Terror" }
     ];
 
-    fs.writeFileSync(testFilePath, JSON.stringify(initialData, null, 2));
+    fs.writeFile(testFilePath, JSON.stringify(initialData, null, 2));
 });
 
 describe('GET /api/genres', () => {
@@ -59,7 +59,7 @@ describe('POST /api/genres', () => {
         expect(res.body).toMatchObject({ name: "Drama" });
 
         // verify it was saved
-        const all = JSON.parse(fs.readFileSync(testFilePath));
+        const all = JSON.parse(await fs.readFile(testFilePath));
         expect(all.length).toBe(4);
     });
 
@@ -81,7 +81,7 @@ describe('PUT /api/genres/:id', () => {
         expect(res.statusCode).toBe(200);
         expect(res.body.name).toBe("Acción épica");
 
-        const data = JSON.parse(fs.readFileSync(testFilePath));
+        const data = JSON.parse(await fs.readFile(testFilePath));
         expect(data[0].name).toBe("Acción épica");
     });
 
@@ -108,7 +108,7 @@ describe('DELETE /api/genres/:id', () => {
         expect(res.statusCode).toBe(200);
         expect(res.body.id).toBe(2);
 
-        const all = JSON.parse(fs.readFileSync(testFilePath));
+        const all = JSON.parse(await fs.readFile(testFilePath));
         expect(all.length).toBe(2);
         expect(all.find(g => g.id === 2)).toBeUndefined();
     });

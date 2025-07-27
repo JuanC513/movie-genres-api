@@ -1,4 +1,4 @@
-import fs from 'fs';
+import { promises as fs } from 'fs';
 import path from 'path';
 import { getAllGenres, getGenreById, addGenre, updateGenre, deleteGenre, setFilePath } from "../models/genre.js";
 
@@ -14,32 +14,34 @@ beforeEach(() => {
     { id: 2, name: "Comedia" },
     { id: 3, name: "Terror" }
   ];
-  fs.writeFileSync(testFilePath, JSON.stringify(initialData, null, 2));
+  fs.writeFile(testFilePath, JSON.stringify(initialData, null, 2));
 });
 
-test('getAllGenres should return all genres', () => {
-  const genres = getAllGenres();
+test('getAllGenres should return all genres', async () => {
+  const genres = await getAllGenres();
   expect(genres.length).toBe(3);
 });
 
-test('getGenreById should return correct genre', () => {
-  const genre = getGenreById(2);
+test('getGenreById should return correct genre', async () => {
+  const genre = await getGenreById(2);
   expect(genre).toEqual({ id: 2, name: "Comedia" });
 });
 
-test('addGenre should add a new genre', () => {
-  const newGenre = addGenre({ name: "Drama" });
+test('addGenre should add a new genre', async () => {
+  const newGenre = await addGenre({ name: "Drama" });
   expect(newGenre.id).toBe(4);
-  expect(getAllGenres().length).toBe(4);
+  const genres = await getAllGenres();
+  expect(genres.length).toBe(4);
 });
 
-test('updateGenre should modify an existing genre', () => {
-  const updated = updateGenre(1, { name: "Aventura" });
+test('updateGenre should modify an existing genre', async () => {
+  const updated = await updateGenre(1, { name: "Aventura" });
   expect(updated.name).toBe("Aventura");
 });
 
-test('deleteGenre should remove a genre', () => {
-  const deleted = deleteGenre(3);
+test('deleteGenre should remove a genre', async () => {
+  const deleted = await deleteGenre(3);
   expect(deleted.name).toBe("Terror");
-  expect(getAllGenres().length).toBe(2);
+  const genres = await getAllGenres();
+  expect(genres.length).toBe(2);
 });
